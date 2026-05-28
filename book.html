@@ -113,11 +113,15 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .btn-reset:hover{border-color:var(--red);color:var(--red);background:var(--red-lite);}
 
 /* STATS — only Total Bookings now */
-.stats-row{display:grid;grid-template-columns:repeat(1,1fr);gap:14px;margin-bottom:22px;max-width:240px;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
 .stat-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);}
+.stat-card.stat-booked::before{background:var(--green);}
+.stat-card.stat-cancelled::before{background:var(--red);}
 .stat-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
 .stat-value{font-size:30px;font-weight:900;color:var(--green);}
+.stat-card.stat-cancelled .stat-value{color:var(--red);}
+@media(max-width:600px){.stats-row{grid-template-columns:repeat(3,1fr);gap:8px;}.stat-value{font-size:22px;}.stat-label{font-size:10px;}}
 
 /* BOOKINGS TABLE */
 .bookings-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
@@ -346,8 +350,16 @@ tbody tr.cancelled-row td{opacity:0.5;}
 
       <div class="stats-row">
         <div class="stat-card">
-          <div class="stat-label">Total Bookings</div>
+          <div class="stat-label">📋 Total Bookings</div>
           <div class="stat-value" id="stat-total">—</div>
+        </div>
+        <div class="stat-card stat-booked">
+          <div class="stat-label">✅ Active Bookings</div>
+          <div class="stat-value" id="stat-booked">—</div>
+        </div>
+        <div class="stat-card stat-cancelled">
+          <div class="stat-label">❌ Cancelled</div>
+          <div class="stat-value" id="stat-cancelled">—</div>
         </div>
       </div>
 
@@ -660,7 +672,12 @@ function loadBookings(){
 }
 
 function updateStats(){
-  document.getElementById('stat-total').textContent = allBookings.filter(function(b){ return b.status !== 'cancelled'; }).length;
+  var total     = allBookings.length;
+  var active    = allBookings.filter(function(b){ return b.status !== 'cancelled'; }).length;
+  var cancelled = allBookings.filter(function(b){ return b.status === 'cancelled'; }).length;
+  document.getElementById('stat-total').textContent     = total;
+  document.getElementById('stat-booked').textContent    = active;
+  document.getElementById('stat-cancelled').textContent = cancelled;
 }
 
 function populateFarmFilter(){
