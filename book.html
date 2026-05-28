@@ -735,32 +735,45 @@ function confirmCancel(){
   btn.disabled = true;
   btn.textContent = 'Cancelling...';
 
+  // ✅ Save cancelTarget locally BEFORE closeModal clears it
+  var target = {
+    bookingId: cancelTarget.bookingId,
+    farmId:    cancelTarget.farmId,
+    checkin:   cancelTarget.checkin,
+    checkout:  cancelTarget.checkout,
+    farmName:  cancelTarget.farmName
+  };
+
   apiCall({
-    action: 'cancel_booking',
-    booking_id: cancelTarget.bookingId,
-    farm_id: cancelTarget.farmId,
-    checkin: cancelTarget.checkin,
-    checkout: cancelTarget.checkout
+    action:     'cancel_booking',
+    booking_id: target.bookingId,
+    farm_id:    target.farmId,
+    checkin:    target.checkin,
+    checkout:   target.checkout
   }, function(err, data){
     btn.disabled = false;
     btn.textContent = 'Yes, Cancel';
-    closeModal();
-    if(err||!data.success){
-      showToast('Error: '+(data&&data.error?data.error:'Could not cancel'),'error');
+    closeModal(); // cancelTarget = null happens here, but we use target now
+
+    if(err || !data.success){
+      showToast('Error: ' + (data && data.error ? data.error : 'Could not cancel'), 'error');
       return;
     }
-    // Update local booking status
+
+    // ✅ Update local booking status immediately (no refresh needed)
     allBookings.forEach(function(b){
-      if(b.id === cancelTarget.bookingId) b.status = 'cancelled';
+      if(b.id === target.bookingId) b.status = 'cancelled';
     });
-    cancelTarget = null;
+
     updateStats();
-    filterBookings();
-    // Refresh calendar if same farm is selected
-    if(selectedProduct && String(selectedProduct.id) === String(cancelTarget && cancelTarget.farmId)){
-      onFarmChange(selectedProduct.id);
+    filterBookings(); // ✅ Table updates instantly
+
+    // ✅ Refresh calendar if this farm is currently selected
+    if(selectedProduct && String(selectedProduct.id) === String(target.farmId)){
+      onFarmChange(selectedProduct.id); // reloads booked dates + calendar
     }
-    showToast('✓ Booking cancelled & dates unblocked','success');
+
+    showToast('✓ Booking cancelled & dates unblocked', 'success'); // ✅ Toast now works
   });
 }
 
