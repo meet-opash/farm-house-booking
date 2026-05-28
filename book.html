@@ -67,9 +67,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .booked-label{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.6px;}
 .booked-chips{display:flex;flex-wrap:wrap;gap:8px;}
 .booked-chip{display:flex;align-items:center;gap:6px;background:#F3F4F6;border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--text);}
-.booked-chip.marked-remove{background:var(--red-lite);border-color:var(--red);color:var(--red);text-decoration:line-through;}
-.chip-remove-btn{width:18px;height:18px;border-radius:50%;border:none;background:none;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:0;transition:color .2s;}
-.chip-remove-btn:hover{color:var(--red);}
 .no-dates{font-size:13px;color:var(--muted);font-style:italic;padding:8px 0;}
 
 /* CALENDAR */
@@ -81,12 +78,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .cal-dow{font-size:11px;font-weight:700;color:var(--muted);padding:4px 0;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
 .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;position:relative;border:1.5px solid transparent;}
-.cal-day:hover:not(.past):not(.empty){background:var(--green-lite);color:var(--green-dark);}
+.cal-day:hover:not(.past):not(.empty):not(.already-booked){background:var(--green-lite);color:var(--green-dark);}
 .cal-day.past{color:#D1D5DB;cursor:not-allowed;}
 .cal-day.empty{cursor:default;}
 .cal-day.already-booked{background:#F3F4F6;color:#9CA3AF;cursor:not-allowed;}
 .cal-day.to-add{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 2px 8px rgba(29,158,117,0.3);}
-.cal-day.to-remove{background:var(--red-lite);color:var(--red);border-color:var(--red);}
 .cal-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:12px;font-weight:700;color:var(--muted);}
 .legend-dot{width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:middle;}
 
@@ -106,7 +102,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .pending-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;}
 .pending-badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:800;}
 .badge-add{background:var(--green-lite);color:var(--green-dark);}
-.badge-remove{background:var(--red-lite);color:var(--red);}
 .pending-dates{font-weight:700;color:var(--text);}
 
 /* ACTION BUTTONS */
@@ -117,20 +112,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .btn-reset{padding:15px 22px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);font-size:15px;font-weight:700;cursor:pointer;color:var(--muted);font-family:var(--font);transition:all .2s;}
 .btn-reset:hover{border-color:var(--red);color:var(--red);background:var(--red-lite);}
 
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
-@media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+/* STATS — only Total Bookings now */
+.stats-row{display:grid;grid-template-columns:repeat(1,1fr);gap:14px;margin-bottom:22px;max-width:240px;}
 .stat-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);}
-.stat-card.amber::before{background:var(--amber);}
-.stat-card.purple::before{background:#8B5CF6;}
-.stat-card.blue::before{background:#3B82F6;}
 .stat-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
-.stat-value{font-size:30px;font-weight:900;color:var(--text);}
-.stat-value.green{color:var(--green);}
-.stat-value.amber{color:var(--amber);}
-.stat-value.purple{color:#8B5CF6;}
-.stat-value.blue{color:#3B82F6;}
+.stat-value{font-size:30px;font-weight:900;color:var(--green);}
 
 /* BOOKINGS TABLE */
 .bookings-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
@@ -152,6 +139,7 @@ td{padding:14px 18px;border-bottom:1px solid #F3F4F6;vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tbody tr{transition:background .15s;}
 tbody tr:hover td{background:#F9FAFB;}
+tbody tr.cancelled-row td{opacity:0.5;}
 
 .td-num{font-size:12px;color:var(--muted);font-weight:700;width:40px;}
 .td-farm{font-weight:800;font-size:14px;color:var(--text);max-width:140px;}
@@ -163,11 +151,23 @@ tbody tr:hover td{background:#F9FAFB;}
 .td-date small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;}
 .td-id{font-size:10px;color:var(--muted);font-family:monospace;max-width:120px;word-break:break-all;}
 
-.status-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;white-space:nowrap;}
-.status-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7;}
-.st-pending{background:#FFF8E6;color:#B45309;border:1px solid #FDE68A;}
-.st-review_sent{background:var(--green-lite);color:var(--green-dark);border:1px solid #6EE7B7;}
-.st-reviewed{background:#EDE9FE;color:#5B21B6;border:1px solid #C4B5FD;}
+/* Cancel button in table */
+.btn-cancel-booking{padding:7px 14px;border:1.5px solid var(--red);border-radius:8px;background:var(--white);font-size:12px;font-weight:800;cursor:pointer;color:var(--red);font-family:var(--font);transition:all .2s;white-space:nowrap;}
+.btn-cancel-booking:hover{background:var(--red);color:#fff;}
+.btn-cancel-booking:disabled{opacity:0.5;cursor:not-allowed;}
+.cancelled-badge{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;background:#F3F4F6;color:#9CA3AF;border:1px solid var(--border);}
+
+/* Confirm modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--white);border-radius:20px;padding:32px 28px;max-width:400px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.18);text-align:center;}
+.modal-icon{width:60px;height:60px;border-radius:50%;background:var(--red-lite);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+.modal-icon svg{width:28px;height:28px;stroke:var(--red);fill:none;stroke-width:2;}
+.modal-title{font-size:18px;font-weight:900;margin-bottom:8px;}
+.modal-desc{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.modal-btns{display:flex;gap:10px;}
+.modal-btn-cancel{flex:1;padding:13px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);font-size:14px;font-weight:700;cursor:pointer;color:var(--muted);font-family:var(--font);}
+.modal-btn-confirm{flex:1;padding:13px;background:var(--red);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);}
+.modal-btn-confirm:disabled{background:#D1D5DB;cursor:not-allowed;}
 
 .empty-state{text-align:center;padding:56px 20px;color:var(--muted);}
 .empty-state .icon{width:56px;height:56px;background:var(--bg);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
@@ -261,7 +261,7 @@ tbody tr:hover td{background:#F9FAFB;}
       </div>
 
       <div class="section-card" id="cal-card" style="display:none;">
-        <div class="section-title">Select Dates to Add / Remove</div>
+        <div class="section-title">Select Dates to Book</div>
         <div class="cal-nav">
           <button class="cal-nav-btn" onclick="calNav(-1)">&#8249;</button>
           <span class="cal-month-label" id="cal-month-label"></span>
@@ -272,7 +272,6 @@ tbody tr:hover td{background:#F9FAFB;}
         <div class="cal-legend">
           <span><span class="legend-dot" style="background:#F3F4F6;border:1px solid #D1D5DB;"></span>Already booked</span>
           <span><span class="legend-dot" style="background:var(--green);"></span>Will be added</span>
-          <span><span class="legend-dot" style="background:var(--red-lite);border:1px solid var(--red);"></span>Will be removed</span>
         </div>
 
         <div class="pending-wrap" id="pending-wrap">
@@ -280,10 +279,6 @@ tbody tr:hover td{background:#F9FAFB;}
           <div id="pending-add-row" class="pending-row" style="display:none;">
             <span class="pending-badge badge-add">+ Adding</span>
             <span class="pending-dates" id="pending-add-dates"></span>
-          </div>
-          <div id="pending-remove-row" class="pending-row" style="display:none;">
-            <span class="pending-badge badge-remove">- Removing</span>
-            <span class="pending-dates" id="pending-remove-dates"></span>
           </div>
         </div>
 
@@ -352,19 +347,7 @@ tbody tr:hover td{background:#F9FAFB;}
       <div class="stats-row">
         <div class="stat-card">
           <div class="stat-label">Total Bookings</div>
-          <div class="stat-value green" id="stat-total">—</div>
-        </div>
-        <div class="stat-card amber">
-          <div class="stat-label">Pending</div>
-          <div class="stat-value amber" id="stat-pending">—</div>
-        </div>
-        <div class="stat-card blue">
-          <div class="stat-label">Review Sent</div>
-          <div class="stat-value blue" id="stat-review">—</div>
-        </div>
-        <div class="stat-card purple">
-          <div class="stat-label">Reviewed</div>
-          <div class="stat-value purple" id="stat-reviewed">—</div>
+          <div class="stat-value" id="stat-total">—</div>
         </div>
       </div>
 
@@ -376,12 +359,6 @@ tbody tr:hover td{background:#F9FAFB;}
           </div>
           <select class="filter-select" id="filter-farm" onchange="filterBookings()">
             <option value="">All Farms</option>
-          </select>
-          <select class="filter-select" id="filter-status" onchange="filterBookings()">
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="review_sent">Review Sent</option>
-            <option value="reviewed">Reviewed</option>
           </select>
           <button class="btn-refresh" id="refresh-btn" onclick="loadBookings()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
@@ -399,6 +376,21 @@ tbody tr:hover td{background:#F9FAFB;}
   </div>
 </div>
 
+<!-- CANCEL CONFIRM MODAL -->
+<div class="modal-overlay" id="cancel-modal" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+    </div>
+    <div class="modal-title">Cancel Booking?</div>
+    <div class="modal-desc" id="modal-desc">This will cancel the booking and unblock the dates so they can be booked again.</div>
+    <div class="modal-btns">
+      <button class="modal-btn-cancel" onclick="closeModal()">No, Keep It</button>
+      <button class="modal-btn-confirm" id="modal-confirm-btn" onclick="confirmCancel()">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -407,9 +399,10 @@ var authToken = null;
 var products  = [];
 var selectedProduct = null;
 var currentDates = [];
-var toAdd = [], toRemove = [];
+var toAdd = [];
 var calYear, calMonth;
 var allBookings = [];
+var cancelTarget = null; // {bookingId, farmId, dates}
 var today = new Date(); today.setHours(0,0,0,0);
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 var DOWS   = ['Mo','Tu','We','Th','Fr','Sa','Su'];
@@ -444,13 +437,11 @@ function doLogin(){
   var errEl = document.getElementById('login-error');
   var inp = document.getElementById('pwd-input');
 
-  // Reset error state
   errEl.style.display = 'none';
   inp.classList.remove('error');
   btn.disabled = true;
   btn.textContent = 'Checking...';
 
-  // Test password against GAS before showing app
   var params = { action: 'get_products', password: pwd };
   var qs = Object.keys(params).map(function(k){
     return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);
@@ -462,12 +453,10 @@ function doLogin(){
       btn.disabled = false;
       btn.textContent = 'Login →';
       if(data.success){
-        // ✅ Correct password — save to sessionStorage and show app
         authToken = pwd;
         sessionStorage.setItem('bm_token', pwd);
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('app').style.display = 'block';
-        // Use already-fetched products data
         products = data.products;
         var html = '<select class="farm-select" id="farm-select" onchange="onFarmChange(this.value)"><option value="">— Select a Farmhouse —</option>';
         products.forEach(function(p){ html += '<option value="'+p.id+'">'+escHtml(p.title)+'</option>'; });
@@ -475,7 +464,6 @@ function doLogin(){
         document.getElementById('farm-selector-wrap').innerHTML = html;
         document.getElementById('top-bar-subtitle').textContent = products.length+' farms loaded';
       } else {
-        // ❌ Wrong password — show error, stay on login
         inp.classList.add('error');
         errEl.style.display = 'block';
         inp.focus();
@@ -505,8 +493,6 @@ function apiCall(params, cb){
   fetch(GAS_URL+'?'+qs, { method:'GET', redirect:'follow' })
     .then(function(r){ return r.json(); })
     .then(function(d){
-      // Only show session expired if we get an explicit invalid password error
-      // AND user is actually logged in (not during login check)
       if(!d.success && d.error==='Invalid password'){
         showToast('Session expired — please login again','error');
         setTimeout(function(){
@@ -543,7 +529,7 @@ function onFarmChange(id){
     return;
   }
   selectedProduct = products.find(function(p){ return String(p.id)===String(id); });
-  toAdd=[]; toRemove=[];
+  toAdd=[];
   var wrap = document.getElementById('booked-dates-wrap');
   wrap.style.display = 'block';
   document.getElementById('booked-chips').innerHTML = '<div class="loader"><div class="spinner"></div>Loading...</div>';
@@ -562,13 +548,11 @@ function renderBookedChips(){
   var chips = document.getElementById('booked-chips');
   if(!currentDates.length){ chips.innerHTML='<span class="no-dates">No dates booked yet</span>'; return; }
   chips.innerHTML = currentDates.map(function(d){
-    var mr = toRemove.indexOf(d)!==-1;
-    return '<span class="booked-chip'+(mr?' marked-remove':'')+'">'+fmtDate(d)
-      +'<button class="chip-remove-btn" onclick="toggleRemoveDate(\''+d+'\')">×</button></span>';
+    return '<span class="booked-chip">'+fmtDate(d)+'</span>';
   }).join('');
 }
 
-// ── CALENDAR ──
+// ── CALENDAR — only add, no remove from calendar ──
 function calNav(delta){
   calMonth += delta;
   if(calMonth<0){ calMonth=11; calYear--; }
@@ -588,52 +572,47 @@ function renderCalendar(){
     var cls='cal-day';
     if(isPast) cls+=' past';
     else if(toAdd.indexOf(iso)!==-1) cls+=' to-add';
-    else if(toRemove.indexOf(iso)!==-1) cls+=' to-remove';
     else if(currentDates.indexOf(iso)!==-1) cls+=' already-booked';
     var el=document.createElement('div'); el.className=cls; el.textContent=day;
-    if(!isPast){ (function(v){ el.addEventListener('click',function(){ onCalDayClick(v); }); })(iso); }
+    // Only allow clicking free dates (not already booked, not past)
+    if(!isPast && currentDates.indexOf(iso)===-1){
+      (function(v){ el.addEventListener('click',function(){ onCalDayClick(v); }); })(iso);
+    }
     grid.appendChild(el);
   }
   updatePendingUI();
 }
 
 function onCalDayClick(iso){
-  var inC=currentDates.indexOf(iso)!==-1, inA=toAdd.indexOf(iso)!==-1, inR=toRemove.indexOf(iso)!==-1;
-  if(inC){ if(inR) toRemove.splice(toRemove.indexOf(iso),1); else toRemove.push(iso); }
-  else{ if(inA) toAdd.splice(toAdd.indexOf(iso),1); else toAdd.push(iso); }
-  renderCalendar(); renderBookedChips();
-}
-
-function toggleRemoveDate(iso){
-  var i=toRemove.indexOf(iso);
-  if(i!==-1) toRemove.splice(i,1); else toRemove.push(iso);
-  renderCalendar(); renderBookedChips();
+  // Only toggle add — no remove from calendar
+  var inA=toAdd.indexOf(iso)!==-1;
+  if(inA) toAdd.splice(toAdd.indexOf(iso),1);
+  else toAdd.push(iso);
+  renderCalendar();
 }
 
 function updatePendingUI(){
-  var has = toAdd.length>0||toRemove.length>0;
+  var has = toAdd.length>0;
   document.getElementById('pending-wrap').style.display = has?'block':'none';
-  document.getElementById('booking-details-form').style.display = toAdd.length>0?'block':'none';
+  document.getElementById('booking-details-form').style.display = has?'block':'none';
   document.getElementById('save-btn').disabled = !has;
-  var ar=document.getElementById('pending-add-row'), rr=document.getElementById('pending-remove-row');
-  if(toAdd.length>0){ ar.style.display='flex'; document.getElementById('pending-add-dates').textContent=toAdd.map(fmtDate).join(', '); } else ar.style.display='none';
-  if(toRemove.length>0){ rr.style.display='flex'; document.getElementById('pending-remove-dates').textContent=toRemove.map(fmtDate).join(', '); } else rr.style.display='none';
+  var ar=document.getElementById('pending-add-row');
+  if(toAdd.length>0){ ar.style.display='flex'; document.getElementById('pending-add-dates').textContent=toAdd.map(fmtDate).join(', '); }
+  else ar.style.display='none';
 }
 
 function resetChanges(){
-  toAdd=[]; toRemove=[];
+  toAdd=[];
   ['cust-name','cust-email','cust-checkin','cust-checkout','cust-guests','cust-amount','cust-notes'].forEach(function(id){ document.getElementById(id).value=''; });
   renderCalendar(); renderBookedChips();
 }
 
 // ── SAVE ──
 function saveChanges(){
-  if(!selectedProduct||(!toAdd.length&&!toRemove.length)) return;
+  if(!selectedProduct||!toAdd.length) return;
   var n=document.getElementById('cust-name').value.trim(), e=document.getElementById('cust-email').value.trim();
-  if(toAdd.length>0){
-    if(!n){ showToast('Please enter customer name','error'); document.getElementById('cust-name').focus(); return; }
-    if(!e||!e.includes('@')){ showToast('Please enter a valid email','error'); document.getElementById('cust-email').focus(); return; }
-  }
+  if(!n){ showToast('Please enter customer name','error'); document.getElementById('cust-name').focus(); return; }
+  if(!e||!e.includes('@')){ showToast('Please enter a valid email','error'); document.getElementById('cust-email').focus(); return; }
   var ci=document.getElementById('cust-checkin').value, co=document.getElementById('cust-checkout').value;
   var g=document.getElementById('cust-guests').value, amt=document.getElementById('cust-amount').value;
   var notes=document.getElementById('cust-notes').value;
@@ -644,8 +623,8 @@ function saveChanges(){
   var ciT=fd&&ci?fd+' at '+ci:fd||ci||'', coT=ld&&co?ld+' at '+co:ld||co||'';
   apiCall({
     action:'update_dates', product_id:selectedProduct.id,
-    dates_to_add:toAdd.join(','), dates_to_remove:toRemove.join(','),
-    send_email:toAdd.length&&e?'true':'false',
+    dates_to_add:toAdd.join(','), dates_to_remove:'',
+    send_email:e?'true':'false',
     cust_name:n, cust_email:e, cust_checkin:ciT, cust_checkout:coT,
     cust_guests:g, cust_amount:amt?('₹'+parseInt(amt).toLocaleString('en-IN')):'',
     cust_amount_raw:amt?String(parseInt(amt)):'0',
@@ -654,7 +633,7 @@ function saveChanges(){
     btn.innerHTML='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg> Save &amp; Send Confirmation';
     if(err||!data.success){ showToast('Error: '+(err||data.error),'error'); btn.disabled=false; return; }
     currentDates=(data.dates||[]).filter(function(d){ return d&&d!=='none'&&d.match(/^\d{4}-\d{2}-\d{2}$/); });
-    toAdd=[]; toRemove=[];
+    toAdd=[];
     ['cust-name','cust-email','cust-checkin','cust-checkout','cust-guests','cust-amount','cust-notes'].forEach(function(id){ document.getElementById(id).value=''; });
     renderCalendar(); renderBookedChips();
     showToast(data.email_sent?'✓ Saved & email sent!':'✓ Dates saved!','success');
@@ -681,14 +660,7 @@ function loadBookings(){
 }
 
 function updateStats(){
-  var t=allBookings.length;
-  var p=allBookings.filter(function(b){ return b.status==='pending'; }).length;
-  var rs=allBookings.filter(function(b){ return b.status==='review_sent'; }).length;
-  var rv=allBookings.filter(function(b){ return b.status==='reviewed'; }).length;
-  document.getElementById('stat-total').textContent=t;
-  document.getElementById('stat-pending').textContent=p;
-  document.getElementById('stat-review').textContent=rs;
-  document.getElementById('stat-reviewed').textContent=rv;
+  document.getElementById('stat-total').textContent = allBookings.filter(function(b){ return b.status !== 'cancelled'; }).length;
 }
 
 function populateFarmFilter(){
@@ -703,12 +675,10 @@ function populateFarmFilter(){
 function filterBookings(){
   var s=(document.getElementById('search-input').value||'').toLowerCase();
   var ff=document.getElementById('filter-farm').value;
-  var fs=document.getElementById('filter-status').value;
   var filtered=allBookings.filter(function(b){
     var ms=!s||(b.name||'').toLowerCase().includes(s)||(b.farm||'').toLowerCase().includes(s)||(b.email||'').toLowerCase().includes(s)||(b.id||'').toLowerCase().includes(s);
     var mf=!ff||b.farm===ff;
-    var mst=!fs||b.status===fs;
-    return ms&&mf&&mst;
+    return ms&&mf;
   });
   var rc=document.getElementById('result-count');
   rc.textContent=filtered.length+' booking'+(filtered.length!==1?'s':'')+' found';
@@ -721,27 +691,77 @@ function renderTable(rows){
     return;
   }
   var html='<div class="table-wrap"><table><thead><tr>'
-    +'<th>#</th><th>Farm</th><th>Customer</th><th>Check-in</th><th>Check-out</th><th>Status</th><th>Booking ID</th>'
+    +'<th>#</th><th>Farm</th><th>Customer</th><th>Check-in</th><th>Check-out</th><th>Action</th>'
     +'</tr></thead><tbody>';
 
   rows.forEach(function(b,i){
-    var sc=b.status==='reviewed'?'st-reviewed':b.status==='review_sent'?'st-review_sent':'st-pending';
-    var sl=b.status==='reviewed'?'Reviewed':b.status==='review_sent'?'Review Sent':'Pending';
+    var isCancelled = b.status === 'cancelled';
     var ciParts=(b.checkin||'').split(' at ');
     var coParts=(b.checkout||'').split(' at ');
-    html+='<tr>'
+    var actionCell = isCancelled
+      ? '<span class="cancelled-badge">✕ Cancelled</span>'
+      : '<button class="btn-cancel-booking" onclick="openCancelModal(\''+escHtml(b.id)+'\',\''+escHtml(b.farm_id||b.farm)+'\',\''+escHtml(b.checkin||'')+'\',\''+escHtml(b.checkout||'')+'\',\''+escHtml(b.farm)+'\')">Cancel Booking</button>';
+
+    html+='<tr'+(isCancelled?' class="cancelled-row"':'')+'>'
       +'<td class="td-num">'+(i+1)+'</td>'
       +'<td class="td-farm">'+escHtml(b.farm||'—')+'</td>'
       +'<td class="td-customer"><div class="name">'+escHtml(b.name||'—')+'</div><div class="email">'+escHtml(b.email||'')+'</div></td>'
       +'<td class="td-date">'+escHtml(ciParts[0]||'—')+(ciParts[1]?'<small>'+escHtml(ciParts[1])+'</small>':'')+'</td>'
       +'<td class="td-date">'+escHtml(coParts[0]||'—')+(coParts[1]?'<small>'+escHtml(coParts[1])+'</small>':'')+'</td>'
-      +'<td><span class="status-badge '+sc+'">'+sl+'</span></td>'
-      +'<td class="td-id">'+escHtml(b.id||'—')+'</td>'
+      +'<td>'+actionCell+'</td>'
       +'</tr>';
   });
 
   html+='</tbody></table></div>';
   document.getElementById('bookings-container').innerHTML=html;
+}
+
+// ── CANCEL BOOKING ──
+function openCancelModal(bookingId, farmId, checkin, checkout, farmName){
+  cancelTarget = { bookingId: bookingId, farmId: farmId, checkin: checkin, checkout: checkout, farmName: farmName };
+  document.getElementById('modal-desc').textContent =
+    'Cancel booking for "' + farmName + '"? This will unblock the dates so they can be booked again.';
+  document.getElementById('cancel-modal').style.display = 'flex';
+}
+
+function closeModal(){
+  document.getElementById('cancel-modal').style.display = 'none';
+  cancelTarget = null;
+}
+
+function confirmCancel(){
+  if(!cancelTarget) return;
+  var btn = document.getElementById('modal-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = 'Cancelling...';
+
+  apiCall({
+    action: 'cancel_booking',
+    booking_id: cancelTarget.bookingId,
+    farm_id: cancelTarget.farmId,
+    checkin: cancelTarget.checkin,
+    checkout: cancelTarget.checkout
+  }, function(err, data){
+    btn.disabled = false;
+    btn.textContent = 'Yes, Cancel';
+    closeModal();
+    if(err||!data.success){
+      showToast('Error: '+(data&&data.error?data.error:'Could not cancel'),'error');
+      return;
+    }
+    // Update local booking status
+    allBookings.forEach(function(b){
+      if(b.id === cancelTarget.bookingId) b.status = 'cancelled';
+    });
+    cancelTarget = null;
+    updateStats();
+    filterBookings();
+    // Refresh calendar if same farm is selected
+    if(selectedProduct && String(selectedProduct.id) === String(cancelTarget && cancelTarget.farmId)){
+      onFarmChange(selectedProduct.id);
+    }
+    showToast('✓ Booking cancelled & dates unblocked','success');
+  });
 }
 
 // ── HELPERS ──
@@ -753,7 +773,7 @@ function fmtDate(iso){
   if(isNaN(d.getTime())) return '';
   return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
 }
-function escHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;'); }
 
 var tt=null;
 function showToast(msg,type){ var t=document.getElementById('toast'); t.textContent=msg; t.className='toast show '+(type||''); if(tt) clearTimeout(tt); tt=setTimeout(function(){ t.className='toast'; },3500); }
