@@ -26,9 +26,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .login-card p{font-size:14px;color:var(--muted);margin-bottom:32px;}
 .login-input{width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:15px;font-family:var(--font);outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:14px;}
 .login-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,0.1);}
+.login-input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(231,76,60,0.1);}
+.login-error{color:var(--red);font-size:13px;font-weight:700;margin-bottom:12px;display:none;background:var(--red-lite);padding:10px 14px;border-radius:8px;text-align:left;}
 .btn-green{width:100%;padding:15px;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:var(--font);box-shadow:0 4px 15px rgba(29,158,117,0.3);transition:transform .1s,box-shadow .2s;}
 .btn-green:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(29,158,117,0.4);}
 .btn-green:active{transform:translateY(0);}
+.btn-green:disabled{background:#D1D5DB;cursor:not-allowed;box-shadow:none;transform:none;}
 
 /* APP */
 #app{display:none;min-height:100vh;}
@@ -114,7 +117,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .btn-reset{padding:15px 22px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);font-size:15px;font-weight:700;cursor:pointer;color:var(--muted);font-family:var(--font);transition:all .2s;}
 .btn-reset:hover{border-color:var(--red);color:var(--red);background:var(--red-lite);}
 
-/* ── STATS ── */
+/* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
 @media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}}
 .stat-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;}
@@ -129,7 +132,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .stat-value.purple{color:#8B5CF6;}
 .stat-value.blue{color:#3B82F6;}
 
-/* ── BOOKINGS TABLE ── */
+/* BOOKINGS TABLE */
 .bookings-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
 .search-wrap{flex:1;min-width:200px;position:relative;}
 .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;}
@@ -207,7 +210,8 @@ tbody tr:hover td{background:#F9FAFB;}
     <h1>Booking Manager</h1>
     <p>Farmhouse date management portal</p>
     <input class="login-input" type="password" id="pwd-input" placeholder="Enter password" autocomplete="current-password">
-    <button class="btn-green" onclick="doLogin()">Login →</button>
+    <div class="login-error" id="login-error">❌ Incorrect password. Please try again.</div>
+    <button class="btn-green" id="login-btn" onclick="doLogin()">Login →</button>
   </div>
 </div>
 
@@ -229,11 +233,11 @@ tbody tr:hover td{background:#F9FAFB;}
 
   <div class="tabs-wrap">
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('book')">
+      <button class="tab-btn active" onclick="switchTab('book',event)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Book Dates
       </button>
-      <button class="tab-btn" onclick="switchTab('bookings')">
+      <button class="tab-btn" onclick="switchTab('bookings',event)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
         All Bookings
       </button>
@@ -410,91 +414,174 @@ var today = new Date(); today.setHours(0,0,0,0);
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 var DOWS   = ['Mo','Tu','We','Th','Fr','Sa','Su'];
 
+// ── SESSION RESTORE ──
+(function(){
+  var saved = sessionStorage.getItem('bm_token');
+  if(saved){
+    authToken = saved;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadFarms();
+  }
+})();
+
 // ── TAB ──
-function switchTab(tab) {
+function switchTab(tab, e){
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.remove('active'); });
-  event.currentTarget.classList.add('active');
+  if(e) e.currentTarget.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
   if(tab==='bookings' && allBookings.length===0) loadBookings();
 }
 
 // ── LOGIN ──
 document.getElementById('pwd-input').addEventListener('keydown',function(e){ if(e.key==='Enter') doLogin(); });
+
 function doLogin(){
-  var pwd=document.getElementById('pwd-input').value.trim();
+  var pwd = document.getElementById('pwd-input').value.trim();
   if(!pwd) return;
-  authToken=pwd;
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='block';
-  loadFarms();
+  var btn = document.getElementById('login-btn');
+  var errEl = document.getElementById('login-error');
+  var inp = document.getElementById('pwd-input');
+
+  // Reset error state
+  errEl.style.display = 'none';
+  inp.classList.remove('error');
+  btn.disabled = true;
+  btn.textContent = 'Checking...';
+
+  // Test password against GAS before showing app
+  var params = { action: 'get_products', password: pwd };
+  var qs = Object.keys(params).map(function(k){
+    return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);
+  }).join('&');
+
+  fetch(GAS_URL+'?'+qs, { method:'GET', redirect:'follow' })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      btn.disabled = false;
+      btn.textContent = 'Login →';
+      if(data.success){
+        // ✅ Correct password — save to sessionStorage and show app
+        authToken = pwd;
+        sessionStorage.setItem('bm_token', pwd);
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        // Use already-fetched products data
+        products = data.products;
+        var html = '<select class="farm-select" id="farm-select" onchange="onFarmChange(this.value)"><option value="">— Select a Farmhouse —</option>';
+        products.forEach(function(p){ html += '<option value="'+p.id+'">'+escHtml(p.title)+'</option>'; });
+        html += '</select>';
+        document.getElementById('farm-selector-wrap').innerHTML = html;
+        document.getElementById('top-bar-subtitle').textContent = products.length+' farms loaded';
+      } else {
+        // ❌ Wrong password — show error, stay on login
+        inp.classList.add('error');
+        errEl.style.display = 'block';
+        inp.focus();
+        inp.select();
+      }
+    })
+    .catch(function(){
+      btn.disabled = false;
+      btn.textContent = 'Login →';
+      errEl.textContent = '⚠️ Network error. Please try again.';
+      errEl.style.display = 'block';
+    });
 }
-function doLogout(){ authToken=null; location.reload(); }
+
+function doLogout(){
+  authToken = null;
+  sessionStorage.removeItem('bm_token');
+  location.reload();
+}
 
 // ── API ──
 function apiCall(params, cb){
-  params.password=authToken;
-  var qs=Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]||''); }).join('&');
-  fetch(GAS_URL+'?'+qs,{method:'GET',redirect:'follow'})
+  params.password = authToken;
+  var qs = Object.keys(params).map(function(k){
+    return encodeURIComponent(k)+'='+encodeURIComponent(params[k]||'');
+  }).join('&');
+  fetch(GAS_URL+'?'+qs, { method:'GET', redirect:'follow' })
     .then(function(r){ return r.json(); })
     .then(function(d){
-      if(!d.success&&d.error==='Invalid password'){ showToast('Session expired','error'); setTimeout(doLogout,2000); return; }
-      cb(null,d);
+      // Only show session expired if we get an explicit invalid password error
+      // AND user is actually logged in (not during login check)
+      if(!d.success && d.error==='Invalid password'){
+        showToast('Session expired — please login again','error');
+        setTimeout(function(){
+          sessionStorage.removeItem('bm_token');
+          doLogout();
+        }, 2000);
+        return;
+      }
+      cb(null, d);
     })
-    .catch(function(e){ cb(e,null); });
+    .catch(function(e){ cb(e, null); });
 }
 
 // ── FARMS ──
 function loadFarms(){
-  apiCall({action:'get_products'},function(err,data){
-    if(err||!data.success){ document.getElementById('farm-selector-wrap').innerHTML='<p style="color:var(--red);font-size:13px;">⚠️ Could not load farms.</p>'; return; }
-    products=data.products;
-    var html='<select class="farm-select" id="farm-select" onchange="onFarmChange(this.value)"><option value="">— Select a Farmhouse —</option>';
-    products.forEach(function(p){ html+='<option value="'+p.id+'">'+escHtml(p.title)+'</option>'; });
-    html+='</select>';
-    document.getElementById('farm-selector-wrap').innerHTML=html;
-    document.getElementById('top-bar-subtitle').textContent=products.length+' farms loaded';
+  apiCall({action:'get_products'}, function(err, data){
+    if(err||!data.success){
+      document.getElementById('farm-selector-wrap').innerHTML='<p style="color:var(--red);font-size:13px;">⚠️ Could not load farms.</p>';
+      return;
+    }
+    products = data.products;
+    var html = '<select class="farm-select" id="farm-select" onchange="onFarmChange(this.value)"><option value="">— Select a Farmhouse —</option>';
+    products.forEach(function(p){ html += '<option value="'+p.id+'">'+escHtml(p.title)+'</option>'; });
+    html += '</select>';
+    document.getElementById('farm-selector-wrap').innerHTML = html;
+    document.getElementById('top-bar-subtitle').textContent = products.length+' farms loaded';
   });
 }
 
 function onFarmChange(id){
-  if(!id){ document.getElementById('booked-dates-wrap').style.display='none'; document.getElementById('cal-card').style.display='none'; return; }
-  selectedProduct=products.find(function(p){ return String(p.id)===String(id); });
+  if(!id){
+    document.getElementById('booked-dates-wrap').style.display='none';
+    document.getElementById('cal-card').style.display='none';
+    return;
+  }
+  selectedProduct = products.find(function(p){ return String(p.id)===String(id); });
   toAdd=[]; toRemove=[];
-  var wrap=document.getElementById('booked-dates-wrap');
-  wrap.style.display='block';
-  document.getElementById('booked-chips').innerHTML='<div class="loader"><div class="spinner"></div>Loading...</div>';
-  document.getElementById('cal-card').style.display='none';
-  apiCall({action:'get_booked_dates',product_id:id},function(err,data){
+  var wrap = document.getElementById('booked-dates-wrap');
+  wrap.style.display = 'block';
+  document.getElementById('booked-chips').innerHTML = '<div class="loader"><div class="spinner"></div>Loading...</div>';
+  document.getElementById('cal-card').style.display = 'none';
+  apiCall({action:'get_booked_dates', product_id:id}, function(err, data){
     if(err||!data.success){ showToast('Could not load dates','error'); return; }
-    // ✅ FIX: "none" value filter karo
-    currentDates=(data.dates||[]).filter(function(d){ return d && d!=='none' && d.match(/^\d{4}-\d{2}-\d{2}$/); });
+    currentDates = (data.dates||[]).filter(function(d){ return d&&d!=='none'&&d.match(/^\d{4}-\d{2}-\d{2}$/); });
     renderBookedChips();
-    var now=new Date(); calYear=now.getFullYear(); calMonth=now.getMonth();
-    document.getElementById('cal-card').style.display='block';
+    var now = new Date(); calYear=now.getFullYear(); calMonth=now.getMonth();
+    document.getElementById('cal-card').style.display = 'block';
     renderCalendar();
   });
 }
 
 function renderBookedChips(){
-  var chips=document.getElementById('booked-chips');
+  var chips = document.getElementById('booked-chips');
   if(!currentDates.length){ chips.innerHTML='<span class="no-dates">No dates booked yet</span>'; return; }
-  chips.innerHTML=currentDates.map(function(d){
-    var mr=toRemove.indexOf(d)!==-1;
+  chips.innerHTML = currentDates.map(function(d){
+    var mr = toRemove.indexOf(d)!==-1;
     return '<span class="booked-chip'+(mr?' marked-remove':'')+'">'+fmtDate(d)
       +'<button class="chip-remove-btn" onclick="toggleRemoveDate(\''+d+'\')">×</button></span>';
   }).join('');
 }
 
 // ── CALENDAR ──
-function calNav(delta){ calMonth+=delta; if(calMonth<0){calMonth=11;calYear--;} if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
+function calNav(delta){
+  calMonth += delta;
+  if(calMonth<0){ calMonth=11; calYear--; }
+  if(calMonth>11){ calMonth=0; calYear++; }
+  renderCalendar();
+}
 
 function renderCalendar(){
-  document.getElementById('cal-month-label').textContent=MONTHS[calMonth]+' '+calYear;
-  var dow=document.getElementById('cal-dow');
-  dow.innerHTML=DOWS.map(function(d){ return '<div class="cal-dow">'+d+'</div>'; }).join('');
-  var grid=document.getElementById('cal-grid'); grid.innerHTML='';
-  var firstDay=new Date(calYear,calMonth,1), startDow=(firstDay.getDay()+6)%7, daysInMo=new Date(calYear,calMonth+1,0).getDate();
+  document.getElementById('cal-month-label').textContent = MONTHS[calMonth]+' '+calYear;
+  var dow = document.getElementById('cal-dow');
+  dow.innerHTML = DOWS.map(function(d){ return '<div class="cal-dow">'+d+'</div>'; }).join('');
+  var grid = document.getElementById('cal-grid'); grid.innerHTML='';
+  var firstDay = new Date(calYear,calMonth,1), startDow=(firstDay.getDay()+6)%7, daysInMo=new Date(calYear,calMonth+1,0).getDate();
   for(var e=0;e<startDow;e++){ var emp=document.createElement('div'); emp.className='cal-day empty'; grid.appendChild(emp); }
   for(var day=1;day<=daysInMo;day++){
     var d=new Date(calYear,calMonth,day), iso=isoDate(d), isPast=d<today;
@@ -516,13 +603,18 @@ function onCalDayClick(iso){
   else{ if(inA) toAdd.splice(toAdd.indexOf(iso),1); else toAdd.push(iso); }
   renderCalendar(); renderBookedChips();
 }
-function toggleRemoveDate(iso){ var i=toRemove.indexOf(iso); if(i!==-1) toRemove.splice(i,1); else toRemove.push(iso); renderCalendar(); renderBookedChips(); }
+
+function toggleRemoveDate(iso){
+  var i=toRemove.indexOf(iso);
+  if(i!==-1) toRemove.splice(i,1); else toRemove.push(iso);
+  renderCalendar(); renderBookedChips();
+}
 
 function updatePendingUI(){
-  var has=toAdd.length>0||toRemove.length>0;
-  document.getElementById('pending-wrap').style.display=has?'block':'none';
-  document.getElementById('booking-details-form').style.display=toAdd.length>0?'block':'none';
-  document.getElementById('save-btn').disabled=!has;
+  var has = toAdd.length>0||toRemove.length>0;
+  document.getElementById('pending-wrap').style.display = has?'block':'none';
+  document.getElementById('booking-details-form').style.display = toAdd.length>0?'block':'none';
+  document.getElementById('save-btn').disabled = !has;
   var ar=document.getElementById('pending-add-row'), rr=document.getElementById('pending-remove-row');
   if(toAdd.length>0){ ar.style.display='flex'; document.getElementById('pending-add-dates').textContent=toAdd.map(fmtDate).join(', '); } else ar.style.display='none';
   if(toRemove.length>0){ rr.style.display='flex'; document.getElementById('pending-remove-dates').textContent=toRemove.map(fmtDate).join(', '); } else rr.style.display='none';
@@ -558,10 +650,9 @@ function saveChanges(){
     cust_guests:g, cust_amount:amt?('₹'+parseInt(amt).toLocaleString('en-IN')):'',
     cust_amount_raw:amt?String(parseInt(amt)):'0',
     cust_notes:notes, farm_name:selectedProduct.title
-  },function(err,data){
+  }, function(err,data){
     btn.innerHTML='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg> Save &amp; Send Confirmation';
     if(err||!data.success){ showToast('Error: '+(err||data.error),'error'); btn.disabled=false; return; }
-    // ✅ FIX: dates filter karo yahan bhi
     currentDates=(data.dates||[]).filter(function(d){ return d&&d!=='none'&&d.match(/^\d{4}-\d{2}-\d{2}$/); });
     toAdd=[]; toRemove=[];
     ['cust-name','cust-email','cust-checkin','cust-checkout','cust-guests','cust-amount','cust-notes'].forEach(function(id){ document.getElementById(id).value=''; });
@@ -576,9 +667,12 @@ function loadBookings(){
   var btn=document.getElementById('refresh-btn');
   btn.classList.add('spinning');
   document.getElementById('bookings-container').innerHTML='<div class="loader"><div class="spinner"></div>Loading bookings...</div>';
-  apiCall({action:'get_bookings'},function(err,data){
+  apiCall({action:'get_bookings'}, function(err,data){
     btn.classList.remove('spinning');
-    if(err||!data.success){ document.getElementById('bookings-container').innerHTML='<div class="empty-state"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div><p>Could not load</p><small>Check GAS connection</small></div>'; return; }
+    if(err||!data.success){
+      document.getElementById('bookings-container').innerHTML='<div class="empty-state"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div><p>Could not load</p><small>Check GAS connection</small></div>';
+      return;
+    }
     allBookings=(data.bookings||[]).reverse();
     updateStats();
     populateFarmFilter();
@@ -633,11 +727,8 @@ function renderTable(rows){
   rows.forEach(function(b,i){
     var sc=b.status==='reviewed'?'st-reviewed':b.status==='review_sent'?'st-review_sent':'st-pending';
     var sl=b.status==='reviewed'?'Reviewed':b.status==='review_sent'?'Review Sent':'Pending';
-
-    // Parse checkin/checkout for nicer display
     var ciParts=(b.checkin||'').split(' at ');
     var coParts=(b.checkout||'').split(' at ');
-
     html+='<tr>'
       +'<td class="td-num">'+(i+1)+'</td>'
       +'<td class="td-farm">'+escHtml(b.farm||'—')+'</td>'
