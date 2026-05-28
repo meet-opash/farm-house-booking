@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
 :root{
   --green:#1D9E75;--green-dark:#166B52;--green-lite:#E6F7F2;
   --amber:#F5A623;--red:#E74C3C;--red-lite:#FDEDED;
@@ -16,158 +15,184 @@
   --shadow:0 2px 20px rgba(0,0,0,0.08);
   --font:'Nunito','Segoe UI',sans-serif;
 }
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
 
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding:0;}
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#E6F7F2 0%,#F7F8FA 100%);}
+.login-card{background:var(--white);border-radius:20px;padding:44px 36px;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,0.12);text-align:center;}
+.login-logo{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 4px 20px rgba(29,158,117,0.3);}
+.login-logo svg{width:36px;height:36px;stroke:#fff;fill:none;stroke-width:2;}
+.login-card h1{font-size:24px;font-weight:900;margin-bottom:6px;}
+.login-card p{font-size:14px;color:var(--muted);margin-bottom:32px;}
+.login-input{width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:15px;font-family:var(--font);outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:14px;}
+.login-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,0.1);}
+.btn-green{width:100%;padding:15px;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:var(--font);box-shadow:0 4px 15px rgba(29,158,117,0.3);transition:transform .1s,box-shadow .2s;}
+.btn-green:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(29,158,117,0.4);}
+.btn-green:active{transform:translateY(0);}
 
-/* ── LOGIN ── */
-#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-card{background:var(--white);border-radius:var(--radius);padding:40px 32px;width:100%;max-width:380px;box-shadow:var(--shadow);text-align:center;}
-.login-logo{width:64px;height:64px;border-radius:16px;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
-.login-logo svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:2;}
-.login-card h1{font-size:22px;font-weight:900;margin-bottom:4px;}
-.login-card p{font-size:14px;color:var(--muted);margin-bottom:28px;}
-.login-input{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:16px;font-family:var(--font);outline:none;transition:border-color .2s;margin-bottom:14px;}
-.login-input:focus{border-color:var(--green);}
-.btn-green{width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:800;cursor:pointer;transition:background .2s;font-family:var(--font);}
-.btn-green:hover{background:var(--green-dark);}
-
-/* ── MAIN APP ── */
+/* APP */
 #app{display:none;min-height:100vh;}
 
-.top-bar{background:var(--white);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+/* TOP BAR */
+.top-bar{background:var(--white);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,0.06);}
 .top-bar-left{display:flex;align-items:center;gap:12px;}
-.top-bar-logo{width:36px;height:36px;border-radius:10px;background:var(--green);display:flex;align-items:center;justify-content:center;}
+.top-bar-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;}
 .top-bar-logo svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.2;}
 .top-bar h2{font-size:17px;font-weight:900;}
 .top-bar small{font-size:12px;color:var(--muted);display:block;font-weight:600;}
-.btn-logout{padding:8px 16px;border:1.5px solid var(--border);border-radius:8px;background:var(--white);font-size:13px;font-weight:700;cursor:pointer;color:var(--muted);font-family:var(--font);transition:all .2s;}
-.btn-logout:hover{border-color:var(--red);color:var(--red);}
+.btn-logout{padding:8px 18px;border:1.5px solid var(--border);border-radius:8px;background:var(--white);font-size:13px;font-weight:700;cursor:pointer;color:var(--muted);font-family:var(--font);transition:all .2s;}
+.btn-logout:hover{border-color:var(--red);color:var(--red);background:var(--red-lite);}
 
-/* ── TABS ── */
-.tabs{display:flex;gap:4px;padding:16px 20px 0;max-width:960px;margin:0 auto;}
-.tab-btn{padding:10px 20px;border:none;border-radius:10px 10px 0 0;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);background:var(--border);color:var(--muted);transition:all .2s;}
-.tab-btn.active{background:var(--white);color:var(--green);border-bottom:2px solid var(--white);}
+/* TABS */
+.tabs-wrap{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;}
+.tabs{display:flex;max-width:960px;margin:0 auto;}
+.tab-btn{padding:14px 20px;border:none;border-bottom:3px solid transparent;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);background:none;color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:7px;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--green);border-bottom-color:var(--green);}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
+.main-content{padding:24px;max-width:960px;margin:0 auto;}
 
-.main-content{padding:20px;max-width:960px;margin:0 auto;}
+/* CARDS */
+.section-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
+.section-title{font-size:15px;font-weight:800;color:var(--text);border-left:4px solid var(--green);padding-left:10px;margin-bottom:18px;}
+.farm-select{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:var(--font);font-weight:700;outline:none;background:var(--white);cursor:pointer;transition:border-color .2s,box-shadow .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;}
+.farm-select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,0.1);}
 
-/* ── SECTION CARD ── */
-.section-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:20px;}
-.section-title{font-size:15px;font-weight:800;color:var(--text);border-left:4px solid var(--green);padding-left:10px;margin-bottom:16px;}
-.farm-select{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:var(--font);font-weight:700;outline:none;background:var(--white);cursor:pointer;transition:border-color .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;}
-.farm-select:focus{border-color:var(--green);}
-
-/* ── BOOKED CHIPS ── */
-.booked-dates-wrap{margin-top:16px;display:none;}
-.booked-label{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+/* BOOKED CHIPS */
+.booked-dates-wrap{margin-top:18px;display:none;}
+.booked-label{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.6px;}
 .booked-chips{display:flex;flex-wrap:wrap;gap:8px;}
-.booked-chip{display:flex;align-items:center;gap:6px;background:#F3F4F6;border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:700;color:var(--text);}
+.booked-chip{display:flex;align-items:center;gap:6px;background:#F3F4F6;border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--text);}
 .booked-chip.marked-remove{background:var(--red-lite);border-color:var(--red);color:var(--red);text-decoration:line-through;}
-.chip-remove-btn{width:18px;height:18px;border-radius:50%;border:none;background:none;cursor:pointer;font-size:15px;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:0;line-height:1;transition:color .2s;}
+.chip-remove-btn{width:18px;height:18px;border-radius:50%;border:none;background:none;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:0;transition:color .2s;}
 .chip-remove-btn:hover{color:var(--red);}
-.no-dates{font-size:13px;color:var(--muted);font-style:italic;}
+.no-dates{font-size:13px;color:var(--muted);font-style:italic;padding:8px 0;}
 
-/* ── CALENDAR ── */
-.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.cal-nav-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-size:18px;color:var(--text);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+/* CALENDAR */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.cal-nav-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-size:20px;color:var(--text);display:flex;align-items:center;justify-content:center;transition:all .2s;}
 .cal-nav-btn:hover{background:var(--green-lite);border-color:var(--green);color:var(--green);}
 .cal-month-label{font-size:16px;font-weight:800;}
-.cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:4px;}
+.cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:6px;}
 .cal-dow{font-size:11px;font-weight:700;color:var(--muted);padding:4px 0;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;position:relative;border:1.5px solid transparent;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;position:relative;border:1.5px solid transparent;}
 .cal-day:hover:not(.past):not(.empty){background:var(--green-lite);color:var(--green-dark);}
 .cal-day.past{color:#D1D5DB;cursor:not-allowed;}
 .cal-day.empty{cursor:default;}
 .cal-day.already-booked{background:#F3F4F6;color:#9CA3AF;cursor:not-allowed;}
-.cal-day.to-add{background:var(--green);color:#fff;border-color:var(--green);}
-.cal-day.to-remove{background:var(--red-lite);color:var(--red);border-color:var(--red);text-decoration:line-through;}
-.cal-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;font-weight:700;color:var(--muted);}
-.legend-dot{width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:4px;vertical-align:middle;}
+.cal-day.to-add{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 2px 8px rgba(29,158,117,0.3);}
+.cal-day.to-remove{background:var(--red-lite);color:var(--red);border-color:var(--red);}
+.cal-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:12px;font-weight:700;color:var(--muted);}
+.legend-dot{width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:middle;}
 
-/* ── FORM ── */
-.booking-details-form{margin-top:18px;padding-top:16px;border-top:1px solid var(--border);display:none;}
+/* FORM */
+.booking-details-form{margin-top:20px;padding-top:18px;border-top:1px solid var(--border);display:none;}
 .form-row{margin-bottom:14px;}
-.form-label{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block;}
-.form-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s;background:var(--white);}
-.form-input:focus{border-color:var(--green);}
+.form-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block;}
+.form-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s,box-shadow .2s;background:var(--white);}
+.form-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,0.1);}
 .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-.email-note{background:var(--green-lite);border:1px solid var(--green);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700;color:var(--green-dark);display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.email-note{background:var(--green-lite);border:1px solid var(--green);border-radius:10px;padding:11px 14px;font-size:12px;font-weight:700;color:var(--green-dark);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
 .email-note svg{width:16px;height:16px;stroke:var(--green-dark);fill:none;flex-shrink:0;}
 
-/* ── PENDING ── */
-.pending-wrap{display:none;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);}
-.pending-title{font-size:14px;font-weight:800;margin-bottom:10px;}
+/* PENDING */
+.pending-wrap{display:none;margin-top:18px;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);}
+.pending-title{font-size:13px;font-weight:800;margin-bottom:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
 .pending-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;}
-.pending-badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:800;}
+.pending-badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:800;}
 .badge-add{background:var(--green-lite);color:var(--green-dark);}
 .badge-remove{background:var(--red-lite);color:var(--red);}
 .pending-dates{font-weight:700;color:var(--text);}
 
-/* ── ACTION BUTTONS ── */
-.action-row{display:flex;gap:12px;margin-top:20px;}
-.btn-save{flex:1;padding:14px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;transition:background .2s;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;}
-.btn-save:hover:not(:disabled){background:var(--green-dark);}
-.btn-save:disabled{background:#D1D5DB;cursor:not-allowed;}
-.btn-reset{padding:14px 20px;border:1.5px solid var(--border);border-radius:10px;background:var(--white);font-size:15px;font-weight:700;cursor:pointer;color:var(--muted);font-family:var(--font);transition:all .2s;}
-.btn-reset:hover{border-color:var(--red);color:var(--red);}
+/* ACTION BUTTONS */
+.action-row{display:flex;gap:12px;margin-top:22px;}
+.btn-save{flex:1;padding:15px;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(29,158,117,0.3);transition:all .2s;}
+.btn-save:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(29,158,117,0.4);}
+.btn-save:disabled{background:#D1D5DB;cursor:not-allowed;box-shadow:none;transform:none;}
+.btn-reset{padding:15px 22px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);font-size:15px;font-weight:700;cursor:pointer;color:var(--muted);font-family:var(--font);transition:all .2s;}
+.btn-reset:hover{border-color:var(--red);color:var(--red);background:var(--red-lite);}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+@media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);}
+.stat-card.amber::before{background:var(--amber);}
+.stat-card.purple::before{background:#8B5CF6;}
+.stat-card.blue::before{background:#3B82F6;}
+.stat-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+.stat-value{font-size:30px;font-weight:900;color:var(--text);}
+.stat-value.green{color:var(--green);}
+.stat-value.amber{color:var(--amber);}
+.stat-value.purple{color:#8B5CF6;}
+.stat-value.blue{color:#3B82F6;}
 
 /* ── BOOKINGS TABLE ── */
-.bookings-toolbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
-.search-input{flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s;}
-.search-input:focus{border-color:var(--green);}
-.filter-select{padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:var(--font);outline:none;background:var(--white);cursor:pointer;}
+.bookings-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.search-wrap{flex:1;min-width:200px;position:relative;}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;}
+.search-input{width:100%;padding:10px 14px 10px 36px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:var(--font);outline:none;transition:all .2s;background:var(--white);}
+.search-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,0.1);}
+.filter-select{padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:700;font-family:var(--font);outline:none;background:var(--white);cursor:pointer;color:var(--text);transition:border-color .2s;}
 .filter-select:focus{border-color:var(--green);}
-.btn-refresh{padding:10px 16px;background:var(--green-lite);color:var(--green-dark);border:1.5px solid var(--green);border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);transition:all .2s;display:flex;align-items:center;gap:6px;}
+.btn-refresh{padding:10px 16px;background:var(--green-lite);color:var(--green-dark);border:1.5px solid var(--green);border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);transition:all .2s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
 .btn-refresh:hover{background:var(--green);color:#fff;}
+.btn-refresh.spinning svg{animation:spin .7s linear infinite;}
 
-.bookings-table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border);}
-table{width:100%;border-collapse:collapse;font-size:13px;}
+.table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border);background:var(--white);}
+table{width:100%;border-collapse:collapse;}
 thead{background:var(--bg);}
-th{padding:12px 16px;text-align:left;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);white-space:nowrap;}
-td{padding:13px 16px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+th{padding:13px 18px;text-align:left;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid var(--border);white-space:nowrap;}
+td{padding:14px 18px;border-bottom:1px solid #F3F4F6;vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:#FAFBFC;}
-.td-farm{font-weight:800;color:var(--text);}
-.td-name{font-weight:700;}
-.td-email{color:var(--muted);font-size:12px;}
-.td-date{font-weight:600;white-space:nowrap;}
-.td-id{font-size:11px;color:var(--muted);font-family:monospace;}
+tbody tr{transition:background .15s;}
+tbody tr:hover td{background:#F9FAFB;}
 
-.status-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;}
-.status-pending{background:#FFF8E6;color:#B45309;border:1px solid #F5A623;}
-.status-review_sent{background:var(--green-lite);color:var(--green-dark);border:1px solid var(--green);}
-.status-reviewed{background:#EDE9FE;color:#5B21B6;border:1px solid #A78BFA;}
+.td-num{font-size:12px;color:var(--muted);font-weight:700;width:40px;}
+.td-farm{font-weight:800;font-size:14px;color:var(--text);max-width:140px;}
+.td-farm small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;}
+.td-customer{max-width:160px;}
+.td-customer .name{font-weight:800;font-size:14px;color:var(--text);}
+.td-customer .email{font-size:11px;color:var(--muted);margin-top:2px;}
+.td-date{font-size:13px;font-weight:700;white-space:nowrap;color:var(--text);}
+.td-date small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;}
+.td-id{font-size:10px;color:var(--muted);font-family:monospace;max-width:120px;word-break:break-all;}
 
-.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px;}
-.stat-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px 20px;}
-.stat-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
-.stat-value{font-size:26px;font-weight:900;color:var(--text);}
-.stat-value.green{color:var(--green);}
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;white-space:nowrap;}
+.status-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7;}
+.st-pending{background:#FFF8E6;color:#B45309;border:1px solid #FDE68A;}
+.st-review_sent{background:var(--green-lite);color:var(--green-dark);border:1px solid #6EE7B7;}
+.st-reviewed{background:#EDE9FE;color:#5B21B6;border:1px solid #C4B5FD;}
 
-.empty-state{text-align:center;padding:48px 20px;color:var(--muted);}
-.empty-state svg{width:48px;height:48px;stroke:var(--border);fill:none;margin-bottom:12px;}
-.empty-state p{font-size:14px;font-weight:700;}
+.empty-state{text-align:center;padding:56px 20px;color:var(--muted);}
+.empty-state .icon{width:56px;height:56px;background:var(--bg);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.empty-state .icon svg{width:28px;height:28px;stroke:#D1D5DB;fill:none;}
+.empty-state p{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.empty-state small{font-size:13px;color:var(--muted);}
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1A1A1A;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:700;transition:transform .3s ease;z-index:999;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+.result-count{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1A1A1A;color:#fff;padding:13px 26px;border-radius:30px;font-size:14px;font-weight:700;transition:transform .3s ease;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
 .toast.show{transform:translateX(-50%) translateY(0);}
 .toast.success{background:var(--green-dark);}
 .toast.error{background:var(--red);}
 
-/* ── LOADING ── */
-.loader{display:flex;align-items:center;justify-content:center;gap:10px;padding:30px;font-size:14px;color:var(--muted);font-weight:700;}
+/* LOADER */
+.loader{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px;font-size:14px;color:var(--muted);font-weight:700;}
 .spinner{width:22px;height:22px;border:2.5px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-@media(max-width:480px){
-  .main-content{padding:12px;}
+@media(max-width:600px){
+  .main-content{padding:14px;}
   .section-card{padding:16px;}
   .action-row{flex-direction:column;}
   .form-row-2{grid-template-columns:1fr;}
-  .tabs{padding:12px 12px 0;}
-  .tab-btn{padding:8px 14px;font-size:13px;}
+  .bookings-toolbar{flex-direction:column;align-items:stretch;}
+  .search-wrap{min-width:unset;}
+  .tabs-wrap{padding:0 14px;}
 }
 </style>
 </head>
@@ -182,12 +207,13 @@ tr:hover td{background:#FAFBFC;}
     <h1>Booking Manager</h1>
     <p>Farmhouse date management portal</p>
     <input class="login-input" type="password" id="pwd-input" placeholder="Enter password" autocomplete="current-password">
-    <button class="btn-green" onclick="doLogin()">Login</button>
+    <button class="btn-green" onclick="doLogin()">Login →</button>
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- APP -->
 <div id="app">
+
   <div class="top-bar">
     <div class="top-bar-left">
       <div class="top-bar-logo">
@@ -201,15 +227,22 @@ tr:hover td{background:#FAFBFC;}
     <button class="btn-logout" onclick="doLogout()">Logout</button>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('book')">📅 Book Dates</button>
-    <button class="tab-btn" onclick="switchTab('bookings')">📋 All Bookings</button>
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('book')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Book Dates
+      </button>
+      <button class="tab-btn" onclick="switchTab('bookings')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+        All Bookings
+      </button>
+    </div>
   </div>
 
   <div class="main-content">
 
-    <!-- TAB 1: BOOK DATES -->
+    <!-- TAB: BOOK DATES -->
     <div class="tab-content active" id="tab-book">
 
       <div class="section-card">
@@ -268,7 +301,7 @@ tr:hover td{background:#FAFBFC;}
             <div>
               <label class="form-label">Check-in Time</label>
               <select class="form-input" id="cust-checkin">
-                <option value="">— Select time —</option>
+                <option value="">— Select —</option>
                 <option value="6:00 AM">6:00 AM</option>
                 <option value="6:00 PM">6:00 PM</option>
               </select>
@@ -276,7 +309,7 @@ tr:hover td{background:#FAFBFC;}
             <div>
               <label class="form-label">Check-out Time</label>
               <select class="form-input" id="cust-checkout">
-                <option value="">— Select time —</option>
+                <option value="">— Select —</option>
                 <option value="5:00 AM">5:00 AM</option>
                 <option value="5:00 PM">5:00 PM</option>
               </select>
@@ -301,28 +334,42 @@ tr:hover td{background:#FAFBFC;}
         <div class="action-row">
           <button class="btn-reset" onclick="resetChanges()">Reset</button>
           <button class="btn-save" id="save-btn" onclick="saveChanges()" disabled>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
             Save &amp; Send Confirmation
           </button>
         </div>
       </div>
 
-    </div><!-- /tab-book -->
+    </div>
 
-    <!-- TAB 2: ALL BOOKINGS -->
+    <!-- TAB: ALL BOOKINGS -->
     <div class="tab-content" id="tab-bookings">
 
-      <!-- Stats -->
-      <div class="stats-row" id="stats-row">
-        <div class="stat-card"><div class="stat-label">Total Bookings</div><div class="stat-value green" id="stat-total">—</div></div>
-        <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" id="stat-pending">—</div></div>
-        <div class="stat-card"><div class="stat-label">Review Sent</div><div class="stat-value" id="stat-review">—</div></div>
-        <div class="stat-card"><div class="stat-label">Reviewed</div><div class="stat-value" id="stat-reviewed">—</div></div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total Bookings</div>
+          <div class="stat-value green" id="stat-total">—</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-label">Pending</div>
+          <div class="stat-value amber" id="stat-pending">—</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-label">Review Sent</div>
+          <div class="stat-value blue" id="stat-review">—</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-label">Reviewed</div>
+          <div class="stat-value purple" id="stat-reviewed">—</div>
+        </div>
       </div>
 
       <div class="section-card">
         <div class="bookings-toolbar">
-          <input class="search-input" type="text" id="search-input" placeholder="🔍 Search by name, farm, email..." oninput="filterBookings()">
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input class="search-input" type="text" id="search-input" placeholder="Search by name, farm, email..." oninput="filterBookings()">
+          </div>
           <select class="filter-select" id="filter-farm" onchange="filterBookings()">
             <option value="">All Farms</option>
           </select>
@@ -332,108 +379,96 @@ tr:hover td{background:#FAFBFC;}
             <option value="review_sent">Review Sent</option>
             <option value="reviewed">Reviewed</option>
           </select>
-          <button class="btn-refresh" onclick="loadBookings()">
+          <button class="btn-refresh" id="refresh-btn" onclick="loadBookings()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
             Refresh
           </button>
         </div>
-
-        <div id="bookings-table-container">
+        <div id="result-count" class="result-count"></div>
+        <div id="bookings-container">
           <div class="loader"><div class="spinner"></div>Loading bookings...</div>
         </div>
       </div>
 
-    </div><!-- /tab-bookings -->
+    </div>
 
-  </div><!-- /main-content -->
-</div><!-- /app -->
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-var GAS_URL      = "https://script.google.com/macros/s/AKfycbwSNYhZgRKv7sVlz4xBskGXHCPOD6oklsq31V1xFSHDSbJGIsDS4DaKqe-pF6fJNqC0yg/exec";
-var APP_PASSWORD = "Opash@21#";
-
-var authToken       = null;
-var products        = [];
+var GAS_URL   = "https://script.google.com/macros/s/AKfycbwSNYhZgRKv7sVlz4xBskGXHCPOD6oklsq31V1xFSHDSbJGIsDS4DaKqe-pF6fJNqC0yg/exec";
+var authToken = null;
+var products  = [];
 var selectedProduct = null;
-var currentDates    = [];
-var toAdd    = [];
-var toRemove = [];
+var currentDates = [];
+var toAdd = [], toRemove = [];
 var calYear, calMonth;
 var allBookings = [];
 var today = new Date(); today.setHours(0,0,0,0);
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 var DOWS   = ['Mo','Tu','We','Th','Fr','Sa','Su'];
 
-// ── TAB SWITCH ──
+// ── TAB ──
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.remove('active'); });
-  document.querySelector('[onclick="switchTab(\''+tab+'\')"]').classList.add('active');
+  event.currentTarget.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
-  if(tab === 'bookings' && allBookings.length === 0) loadBookings();
+  if(tab==='bookings' && allBookings.length===0) loadBookings();
 }
 
 // ── LOGIN ──
-document.getElementById('pwd-input').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
-function doLogin() {
-  var pwd = document.getElementById('pwd-input').value.trim();
-  if (!pwd) return;
-  authToken = pwd;
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+document.getElementById('pwd-input').addEventListener('keydown',function(e){ if(e.key==='Enter') doLogin(); });
+function doLogin(){
+  var pwd=document.getElementById('pwd-input').value.trim();
+  if(!pwd) return;
+  authToken=pwd;
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
   loadFarms();
 }
-function doLogout() { authToken = null; location.reload(); }
+function doLogout(){ authToken=null; location.reload(); }
 
 // ── API ──
-function apiCall(params, callback) {
-  params.password = authToken;
-  var qs = Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]||''); }).join('&');
-  fetch(GAS_URL+'?'+qs, { method:'GET', redirect:'follow' })
+function apiCall(params, cb){
+  params.password=authToken;
+  var qs=Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]||''); }).join('&');
+  fetch(GAS_URL+'?'+qs,{method:'GET',redirect:'follow'})
     .then(function(r){ return r.json(); })
-    .then(function(data){
-      if(!data.success && data.error==='Invalid password'){ showToast('Session expired','error'); setTimeout(doLogout,2000); return; }
-      callback(null, data);
+    .then(function(d){
+      if(!d.success&&d.error==='Invalid password'){ showToast('Session expired','error'); setTimeout(doLogout,2000); return; }
+      cb(null,d);
     })
-    .catch(function(err){ callback(err, null); });
+    .catch(function(e){ cb(e,null); });
 }
 
-// ── LOAD FARMS ──
-function loadFarms() {
-  apiCall({ action:'get_products' }, function(err, data) {
+// ── FARMS ──
+function loadFarms(){
+  apiCall({action:'get_products'},function(err,data){
     if(err||!data.success){ document.getElementById('farm-selector-wrap').innerHTML='<p style="color:var(--red);font-size:13px;">⚠️ Could not load farms.</p>'; return; }
-    products = data.products;
-    renderFarmSelect();
-    document.getElementById('top-bar-subtitle').textContent = products.length+' farms loaded';
+    products=data.products;
+    var html='<select class="farm-select" id="farm-select" onchange="onFarmChange(this.value)"><option value="">— Select a Farmhouse —</option>';
+    products.forEach(function(p){ html+='<option value="'+p.id+'">'+escHtml(p.title)+'</option>'; });
+    html+='</select>';
+    document.getElementById('farm-selector-wrap').innerHTML=html;
+    document.getElementById('top-bar-subtitle').textContent=products.length+' farms loaded';
   });
 }
 
-function renderFarmSelect() {
-  var html = '<select class="farm-select" id="farm-select" onchange="onFarmChange(this.value)">';
-  html += '<option value="">— Select a Farmhouse —</option>';
-  products.forEach(function(p){ html += '<option value="'+p.id+'">'+escHtml(p.title)+'</option>'; });
-  html += '</select>';
-  document.getElementById('farm-selector-wrap').innerHTML = html;
-}
-
-function onFarmChange(productId) {
-  if(!productId){ document.getElementById('booked-dates-wrap').style.display='none'; document.getElementById('cal-card').style.display='none'; return; }
-  selectedProduct = products.find(function(p){ return String(p.id)===String(productId); });
+function onFarmChange(id){
+  if(!id){ document.getElementById('booked-dates-wrap').style.display='none'; document.getElementById('cal-card').style.display='none'; return; }
+  selectedProduct=products.find(function(p){ return String(p.id)===String(id); });
   toAdd=[]; toRemove=[];
-  loadBookedDates(productId);
-}
-
-function loadBookedDates(productId) {
-  document.getElementById('booked-dates-wrap').style.display='none';
-  document.getElementById('cal-card').style.display='none';
-  var wrap = document.getElementById('booked-dates-wrap');
+  var wrap=document.getElementById('booked-dates-wrap');
   wrap.style.display='block';
   document.getElementById('booked-chips').innerHTML='<div class="loader"><div class="spinner"></div>Loading...</div>';
-  apiCall({ action:'get_booked_dates', product_id:productId }, function(err, data) {
+  document.getElementById('cal-card').style.display='none';
+  apiCall({action:'get_booked_dates',product_id:id},function(err,data){
     if(err||!data.success){ showToast('Could not load dates','error'); return; }
-    currentDates = data.dates||[];
+    // ✅ FIX: "none" value filter karo
+    currentDates=(data.dates||[]).filter(function(d){ return d && d!=='none' && d.match(/^\d{4}-\d{2}-\d{2}$/); });
     renderBookedChips();
     var now=new Date(); calYear=now.getFullYear(); calMonth=now.getMonth();
     document.getElementById('cal-card').style.display='block';
@@ -441,26 +476,25 @@ function loadBookedDates(productId) {
   });
 }
 
-function renderBookedChips() {
-  var chips = document.getElementById('booked-chips');
+function renderBookedChips(){
+  var chips=document.getElementById('booked-chips');
   if(!currentDates.length){ chips.innerHTML='<span class="no-dates">No dates booked yet</span>'; return; }
-  chips.innerHTML = currentDates.map(function(d){
-    var mr = toRemove.indexOf(d)!==-1;
-    return '<span class="booked-chip'+(mr?' marked-remove':'')+'">'+fmtDate(d)+'<button class="chip-remove-btn" onclick="toggleRemoveDate(\''+d+'\')">×</button></span>';
+  chips.innerHTML=currentDates.map(function(d){
+    var mr=toRemove.indexOf(d)!==-1;
+    return '<span class="booked-chip'+(mr?' marked-remove':'')+'">'+fmtDate(d)
+      +'<button class="chip-remove-btn" onclick="toggleRemoveDate(\''+d+'\')">×</button></span>';
   }).join('');
 }
 
 // ── CALENDAR ──
 function calNav(delta){ calMonth+=delta; if(calMonth<0){calMonth=11;calYear--;} if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
 
-function renderCalendar() {
-  document.getElementById('cal-month-label').textContent = MONTHS[calMonth]+' '+calYear;
+function renderCalendar(){
+  document.getElementById('cal-month-label').textContent=MONTHS[calMonth]+' '+calYear;
   var dow=document.getElementById('cal-dow');
   dow.innerHTML=DOWS.map(function(d){ return '<div class="cal-dow">'+d+'</div>'; }).join('');
   var grid=document.getElementById('cal-grid'); grid.innerHTML='';
-  var firstDay=new Date(calYear,calMonth,1);
-  var startDow=(firstDay.getDay()+6)%7;
-  var daysInMo=new Date(calYear,calMonth+1,0).getDate();
+  var firstDay=new Date(calYear,calMonth,1), startDow=(firstDay.getDay()+6)%7, daysInMo=new Date(calYear,calMonth+1,0).getDate();
   for(var e=0;e<startDow;e++){ var emp=document.createElement('div'); emp.className='cal-day empty'; grid.appendChild(emp); }
   for(var day=1;day<=daysInMo;day++){
     var d=new Date(calYear,calMonth,day), iso=isoDate(d), isPast=d<today;
@@ -477,22 +511,21 @@ function renderCalendar() {
 }
 
 function onCalDayClick(iso){
-  var inCurrent=currentDates.indexOf(iso)!==-1, inAdd=toAdd.indexOf(iso)!==-1, inRemove=toRemove.indexOf(iso)!==-1;
-  if(inCurrent){ if(inRemove) toRemove.splice(toRemove.indexOf(iso),1); else toRemove.push(iso); }
-  else{ if(inAdd) toAdd.splice(toAdd.indexOf(iso),1); else toAdd.push(iso); }
+  var inC=currentDates.indexOf(iso)!==-1, inA=toAdd.indexOf(iso)!==-1, inR=toRemove.indexOf(iso)!==-1;
+  if(inC){ if(inR) toRemove.splice(toRemove.indexOf(iso),1); else toRemove.push(iso); }
+  else{ if(inA) toAdd.splice(toAdd.indexOf(iso),1); else toAdd.push(iso); }
   renderCalendar(); renderBookedChips();
 }
-
-function toggleRemoveDate(iso){ var idx=toRemove.indexOf(iso); if(idx!==-1) toRemove.splice(idx,1); else toRemove.push(iso); renderCalendar(); renderBookedChips(); }
+function toggleRemoveDate(iso){ var i=toRemove.indexOf(iso); if(i!==-1) toRemove.splice(i,1); else toRemove.push(iso); renderCalendar(); renderBookedChips(); }
 
 function updatePendingUI(){
-  var hasChanges=toAdd.length>0||toRemove.length>0;
-  document.getElementById('pending-wrap').style.display=hasChanges?'block':'none';
+  var has=toAdd.length>0||toRemove.length>0;
+  document.getElementById('pending-wrap').style.display=has?'block':'none';
   document.getElementById('booking-details-form').style.display=toAdd.length>0?'block':'none';
-  document.getElementById('save-btn').disabled=!hasChanges;
-  var addRow=document.getElementById('pending-add-row'), removeRow=document.getElementById('pending-remove-row');
-  if(toAdd.length>0){ addRow.style.display='flex'; document.getElementById('pending-add-dates').textContent=toAdd.map(fmtDate).join(', '); } else addRow.style.display='none';
-  if(toRemove.length>0){ removeRow.style.display='flex'; document.getElementById('pending-remove-dates').textContent=toRemove.map(fmtDate).join(', '); } else removeRow.style.display='none';
+  document.getElementById('save-btn').disabled=!has;
+  var ar=document.getElementById('pending-add-row'), rr=document.getElementById('pending-remove-row');
+  if(toAdd.length>0){ ar.style.display='flex'; document.getElementById('pending-add-dates').textContent=toAdd.map(fmtDate).join(', '); } else ar.style.display='none';
+  if(toRemove.length>0){ rr.style.display='flex'; document.getElementById('pending-remove-dates').textContent=toRemove.map(fmtDate).join(', '); } else rr.style.display='none';
 }
 
 function resetChanges(){
@@ -503,143 +536,136 @@ function resetChanges(){
 
 // ── SAVE ──
 function saveChanges(){
-  if(!selectedProduct) return;
-  if(toAdd.length===0&&toRemove.length===0) return;
-  var custName=document.getElementById('cust-name').value.trim();
-  var custEmail=document.getElementById('cust-email').value.trim();
+  if(!selectedProduct||(!toAdd.length&&!toRemove.length)) return;
+  var n=document.getElementById('cust-name').value.trim(), e=document.getElementById('cust-email').value.trim();
   if(toAdd.length>0){
-    if(!custName){ showToast('Please enter customer name','error'); document.getElementById('cust-name').focus(); return; }
-    if(!custEmail||!custEmail.includes('@')){ showToast('Please enter a valid email','error'); document.getElementById('cust-email').focus(); return; }
+    if(!n){ showToast('Please enter customer name','error'); document.getElementById('cust-name').focus(); return; }
+    if(!e||!e.includes('@')){ showToast('Please enter a valid email','error'); document.getElementById('cust-email').focus(); return; }
   }
-  var custCheckin=document.getElementById('cust-checkin').value.trim();
-  var custCheckout=document.getElementById('cust-checkout').value.trim();
-  var custGuests=document.getElementById('cust-guests').value.trim();
-  var custAmount=document.getElementById('cust-amount').value.trim();
-  var custNotes=document.getElementById('cust-notes').value.trim();
-  var btn=document.getElementById('save-btn');
-  btn.disabled=true;
-  btn.innerHTML='<div class="spinner" style="border-top-color:#fff;"></div> Saving...';
-  var sortedDates=toAdd.slice().sort();
-  var firstDate=sortedDates.length>0?fmtDate(sortedDates[0]):'';
-  var lastDate=sortedDates.length>0?fmtDate(sortedDates[sortedDates.length-1]):'';
-  var ciText=firstDate&&custCheckin?firstDate+' at '+custCheckin:firstDate||custCheckin||'';
-  var coText=lastDate&&custCheckout?lastDate+' at '+custCheckout:lastDate||custCheckout||'';
+  var ci=document.getElementById('cust-checkin').value, co=document.getElementById('cust-checkout').value;
+  var g=document.getElementById('cust-guests').value, amt=document.getElementById('cust-amount').value;
+  var notes=document.getElementById('cust-notes').value;
+  var btn=document.getElementById('save-btn'); btn.disabled=true;
+  btn.innerHTML='<div class="spinner" style="border-top-color:#fff;width:18px;height:18px;border-width:2px;"></div> Saving...';
+  var sorted=toAdd.slice().sort();
+  var fd=sorted.length?fmtDate(sorted[0]):'', ld=sorted.length?fmtDate(sorted[sorted.length-1]):'';
+  var ciT=fd&&ci?fd+' at '+ci:fd||ci||'', coT=ld&&co?ld+' at '+co:ld||co||'';
   apiCall({
-    action:'update_dates',
-    product_id:selectedProduct.id,
-    dates_to_add:toAdd.join(','),
-    dates_to_remove:toRemove.join(','),
-    send_email:toAdd.length>0&&custEmail?'true':'false',
-    cust_name:custName,
-    cust_email:custEmail,
-    cust_checkin:ciText,
-    cust_checkout:coText,
-    cust_guests:custGuests,
-    cust_amount:custAmount?('₹'+parseInt(custAmount).toLocaleString('en-IN')):'',
-    cust_amount_raw:custAmount?String(parseInt(custAmount)):'0',
-    cust_notes:custNotes,
-    farm_name:selectedProduct.title
-  }, function(err, data){
-    btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg> Save &amp; Send Confirmation';
+    action:'update_dates', product_id:selectedProduct.id,
+    dates_to_add:toAdd.join(','), dates_to_remove:toRemove.join(','),
+    send_email:toAdd.length&&e?'true':'false',
+    cust_name:n, cust_email:e, cust_checkin:ciT, cust_checkout:coT,
+    cust_guests:g, cust_amount:amt?('₹'+parseInt(amt).toLocaleString('en-IN')):'',
+    cust_amount_raw:amt?String(parseInt(amt)):'0',
+    cust_notes:notes, farm_name:selectedProduct.title
+  },function(err,data){
+    btn.innerHTML='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg> Save &amp; Send Confirmation';
     if(err||!data.success){ showToast('Error: '+(err||data.error),'error'); btn.disabled=false; return; }
-    currentDates=data.dates||[]; toAdd=[]; toRemove=[];
+    // ✅ FIX: dates filter karo yahan bhi
+    currentDates=(data.dates||[]).filter(function(d){ return d&&d!=='none'&&d.match(/^\d{4}-\d{2}-\d{2}$/); });
+    toAdd=[]; toRemove=[];
     ['cust-name','cust-email','cust-checkin','cust-checkout','cust-guests','cust-amount','cust-notes'].forEach(function(id){ document.getElementById(id).value=''; });
     renderCalendar(); renderBookedChips();
-    var msg=data.email_sent?'✓ Dates saved & email sent!':'✓ Dates saved!';
-    showToast(msg,'success');
-    // Refresh bookings in background
+    showToast(data.email_sent?'✓ Saved & email sent!':'✓ Dates saved!','success');
     allBookings=[];
   });
 }
 
-// ── LOAD BOOKINGS ──
+// ── BOOKINGS ──
 function loadBookings(){
-  document.getElementById('bookings-table-container').innerHTML='<div class="loader"><div class="spinner"></div>Loading bookings...</div>';
-  apiCall({ action:'get_bookings' }, function(err, data){
-    if(err||!data.success){ document.getElementById('bookings-table-container').innerHTML='<div class="empty-state"><p>Could not load bookings.</p></div>'; return; }
-    allBookings = (data.bookings||[]).reverse(); // Latest pehle
+  var btn=document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+  document.getElementById('bookings-container').innerHTML='<div class="loader"><div class="spinner"></div>Loading bookings...</div>';
+  apiCall({action:'get_bookings'},function(err,data){
+    btn.classList.remove('spinning');
+    if(err||!data.success){ document.getElementById('bookings-container').innerHTML='<div class="empty-state"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div><p>Could not load</p><small>Check GAS connection</small></div>'; return; }
+    allBookings=(data.bookings||[]).reverse();
     updateStats();
     populateFarmFilter();
-    renderBookingsTable(allBookings);
+    filterBookings();
   });
 }
 
 function updateStats(){
-  var total=allBookings.length;
-  var pending=allBookings.filter(function(b){ return b.status==='pending'; }).length;
-  var reviewSent=allBookings.filter(function(b){ return b.status==='review_sent'; }).length;
-  var reviewed=allBookings.filter(function(b){ return b.status==='reviewed'; }).length;
-  document.getElementById('stat-total').textContent=total;
-  document.getElementById('stat-pending').textContent=pending;
-  document.getElementById('stat-review').textContent=reviewSent;
-  document.getElementById('stat-reviewed').textContent=reviewed;
+  var t=allBookings.length;
+  var p=allBookings.filter(function(b){ return b.status==='pending'; }).length;
+  var rs=allBookings.filter(function(b){ return b.status==='review_sent'; }).length;
+  var rv=allBookings.filter(function(b){ return b.status==='reviewed'; }).length;
+  document.getElementById('stat-total').textContent=t;
+  document.getElementById('stat-pending').textContent=p;
+  document.getElementById('stat-review').textContent=rs;
+  document.getElementById('stat-reviewed').textContent=rv;
 }
 
 function populateFarmFilter(){
-  var farms=[]; var seen={};
+  var farms=[],seen={};
   allBookings.forEach(function(b){ if(b.farm&&!seen[b.farm]){ farms.push(b.farm); seen[b.farm]=true; } });
   var sel=document.getElementById('filter-farm');
+  var cur=sel.value;
   sel.innerHTML='<option value="">All Farms</option>';
-  farms.forEach(function(f){ sel.innerHTML+='<option value="'+escHtml(f)+'">'+escHtml(f)+'</option>'; });
+  farms.forEach(function(f){ sel.innerHTML+='<option value="'+escHtml(f)+'"'+(f===cur?' selected':'')+'>'+escHtml(f)+'</option>'; });
 }
 
 function filterBookings(){
-  var search=document.getElementById('search-input').value.toLowerCase();
-  var farmF=document.getElementById('filter-farm').value;
-  var statusF=document.getElementById('filter-status').value;
+  var s=(document.getElementById('search-input').value||'').toLowerCase();
+  var ff=document.getElementById('filter-farm').value;
+  var fs=document.getElementById('filter-status').value;
   var filtered=allBookings.filter(function(b){
-    var matchSearch=!search||(b.name||'').toLowerCase().includes(search)||(b.farm||'').toLowerCase().includes(search)||(b.email||'').toLowerCase().includes(search)||(b.id||'').toLowerCase().includes(search);
-    var matchFarm=!farmF||b.farm===farmF;
-    var matchStatus=!statusF||b.status===statusF;
-    return matchSearch&&matchFarm&&matchStatus;
+    var ms=!s||(b.name||'').toLowerCase().includes(s)||(b.farm||'').toLowerCase().includes(s)||(b.email||'').toLowerCase().includes(s)||(b.id||'').toLowerCase().includes(s);
+    var mf=!ff||b.farm===ff;
+    var mst=!fs||b.status===fs;
+    return ms&&mf&&mst;
   });
-  renderBookingsTable(filtered);
+  var rc=document.getElementById('result-count');
+  rc.textContent=filtered.length+' booking'+(filtered.length!==1?'s':'')+' found';
+  renderTable(filtered);
 }
 
-function renderBookingsTable(bookings){
-  if(!bookings.length){
-    document.getElementById('bookings-table-container').innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><p>No bookings found</p></div>';
+function renderTable(rows){
+  if(!rows.length){
+    document.getElementById('bookings-container').innerHTML='<div class="empty-state"><div class="icon"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div><p>No bookings found</p><small>Try changing your filters</small></div>';
     return;
   }
-
-  var html='<div class="bookings-table-wrap"><table><thead><tr>'
-    +'<th>#</th>'
-    +'<th>Farm</th>'
-    +'<th>Customer</th>'
-    +'<th>Check-in</th>'
-    +'<th>Check-out</th>'
-    +'<th>Status</th>'
-    +'<th>Booking ID</th>'
+  var html='<div class="table-wrap"><table><thead><tr>'
+    +'<th>#</th><th>Farm</th><th>Customer</th><th>Check-in</th><th>Check-out</th><th>Status</th><th>Booking ID</th>'
     +'</tr></thead><tbody>';
 
-  bookings.forEach(function(b, i){
-    var statusCls = b.status==='reviewed'?'status-reviewed':b.status==='review_sent'?'status-review_sent':'status-pending';
-    var statusLabel = b.status==='reviewed'?'⭐ Reviewed':b.status==='review_sent'?'📧 Review Sent':'🕐 Pending';
+  rows.forEach(function(b,i){
+    var sc=b.status==='reviewed'?'st-reviewed':b.status==='review_sent'?'st-review_sent':'st-pending';
+    var sl=b.status==='reviewed'?'Reviewed':b.status==='review_sent'?'Review Sent':'Pending';
+
+    // Parse checkin/checkout for nicer display
+    var ciParts=(b.checkin||'').split(' at ');
+    var coParts=(b.checkout||'').split(' at ');
+
     html+='<tr>'
-      +'<td style="color:var(--muted);font-size:12px;">'+(i+1)+'</td>'
+      +'<td class="td-num">'+(i+1)+'</td>'
       +'<td class="td-farm">'+escHtml(b.farm||'—')+'</td>'
-      +'<td>'
-        +'<div class="td-name">'+escHtml(b.name||'—')+'</div>'
-        +'<div class="td-email">'+escHtml(b.email||'')+'</div>'
-      +'</td>'
-      +'<td class="td-date">'+escHtml(b.checkin||'—')+'</td>'
-      +'<td class="td-date">'+escHtml(b.checkout||'—')+'</td>'
-      +'<td><span class="status-badge '+statusCls+'">'+statusLabel+'</span></td>'
+      +'<td class="td-customer"><div class="name">'+escHtml(b.name||'—')+'</div><div class="email">'+escHtml(b.email||'')+'</div></td>'
+      +'<td class="td-date">'+escHtml(ciParts[0]||'—')+(ciParts[1]?'<small>'+escHtml(ciParts[1])+'</small>':'')+'</td>'
+      +'<td class="td-date">'+escHtml(coParts[0]||'—')+(coParts[1]?'<small>'+escHtml(coParts[1])+'</small>':'')+'</td>'
+      +'<td><span class="status-badge '+sc+'">'+sl+'</span></td>'
       +'<td class="td-id">'+escHtml(b.id||'—')+'</td>'
       +'</tr>';
   });
 
   html+='</tbody></table></div>';
-  document.getElementById('bookings-table-container').innerHTML=html;
+  document.getElementById('bookings-container').innerHTML=html;
 }
 
 // ── HELPERS ──
 function isoDate(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-function fmtDate(iso){ var p=iso.split('-'); var d=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2])); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getDate()+', '+d.getFullYear(); }
+function fmtDate(iso){
+  if(!iso||!iso.match(/^\d{4}-\d{2}-\d{2}$/)) return '';
+  var p=iso.split('-');
+  var d=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));
+  if(isNaN(d.getTime())) return '';
+  return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+}
 function escHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-var toastTimer=null;
-function showToast(msg,type){ var t=document.getElementById('toast'); t.textContent=msg; t.className='toast show '+(type||''); if(toastTimer) clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.className='toast'; },3500); }
+var tt=null;
+function showToast(msg,type){ var t=document.getElementById('toast'); t.textContent=msg; t.className='toast show '+(type||''); if(tt) clearTimeout(tt); tt=setTimeout(function(){ t.className='toast'; },3500); }
 </script>
 </body>
 </html>
