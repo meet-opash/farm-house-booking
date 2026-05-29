@@ -82,13 +82,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .cal-day.past{color:#D1D5DB;cursor:not-allowed;}
 .cal-day.empty{cursor:default;}
 .cal-day.already-booked{background:#F3F4F6;color:#9CA3AF;cursor:not-allowed;}
-.cal-day.past-booked{
-  background:#FFF7ED;
-  color:#F5A623;
-  cursor:not-allowed;
-  text-decoration:line-through;
-  border-color:#FDE68A;
-}
 .cal-day.to-add{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 2px 8px rgba(29,158,117,0.3);}
 .cal-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:12px;font-weight:700;color:var(--muted);}
 .legend-dot{width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:middle;}
@@ -282,7 +275,6 @@ tbody tr.cancelled-row td{opacity:0.5;}
         <div class="cal-grid" id="cal-grid"></div>
         <div class="cal-legend">
           <span><span class="legend-dot" style="background:#F3F4F6;border:1px solid #D1D5DB;"></span>Already booked</span>
-          <span><span class="legend-dot" style="background:#FFF7ED;border:1px solid #FDE68A;text-decoration:line-through;color:#F5A623;font-size:9px;display:inline-flex;align-items:center;justify-content:center;">✕</span>Past booked</span>
           <span><span class="legend-dot" style="background:var(--green);"></span>Will be added</span>
         </div>
 
@@ -590,7 +582,6 @@ function renderCalendar(){
   for(var day=1;day<=daysInMo;day++){
     var d=new Date(calYear,calMonth,day), iso=isoDate(d), isPast=d<today;
     var cls='cal-day';
-    if(isPast && currentDates.indexOf(iso)!==-1) cls+=' past-booked';
     if(currentDates.indexOf(iso)!==-1) cls+=' already-booked';
     else if(isPast) cls+=' past';
     else if(toAdd.indexOf(iso)!==-1) cls+=' to-add';
