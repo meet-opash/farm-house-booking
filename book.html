@@ -591,9 +591,9 @@ function renderCalendar(){
     var d=new Date(calYear,calMonth,day), iso=isoDate(d), isPast=d<today;
     var cls='cal-day';
     if(isPast && currentDates.indexOf(iso)!==-1) cls+=' past-booked';
+    if(currentDates.indexOf(iso)!==-1) cls+=' already-booked';
     else if(isPast) cls+=' past';
     else if(toAdd.indexOf(iso)!==-1) cls+=' to-add';
-    else if(currentDates.indexOf(iso)!==-1) cls+=' already-booked';
     var el=document.createElement('div'); el.className=cls; el.textContent=day;
     // Only allow clicking free dates (not already booked, not past)
     if(!isPast && currentDates.indexOf(iso)===-1){
